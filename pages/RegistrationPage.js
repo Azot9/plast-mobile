@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TextInput, Button, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Button, Alert, Keyboard, TouchableWithoutFeedback, Switch } from 'react-native';
 import axios from 'axios';
 import setToken from "../actions"
 import { connect } from "react-redux";
@@ -32,9 +32,12 @@ const styles = StyleSheet.create({
         color: "#FF2D55"
     },
     inputsWrapper: {
-        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    switcherAndInputs: {
+        flexGrow: 1,
+        justifyContent: 'center'
     },
     textInput: {
         height: 36,
@@ -52,6 +55,15 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingBottom: 40
     },
+    switchWrapper: {
+        paddingBottom: 20,
+        flexDirection: "row",
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    switcher: {
+        marginHorizontal: 30
+    }
 });
 
 
@@ -61,7 +73,8 @@ class RegistrationPage extends Component {
         password: '',
         name: '',
         surname: '',
-        is_loging_in: true
+        is_loging_in: true,
+        is_vyhovnyk: false
     }
 
     render() {
@@ -71,13 +84,27 @@ class RegistrationPage extends Component {
                     <View style={styles.topBarWrapper}>
                         <View style={styles.topBar}>
                             <Text style={styles.text}>Plast</Text>
-                            <Text style={styles.text}>11-18</Text>
+                            <Text style={styles.text}>{this.state.is_vyhovnyk ? "18-35" : "11-18"}  </Text>
                         </View>
                     </View>
-                    {this.chosedInputs()}
+                    <View style={styles.switcherAndInputs}>
+                        <View style={styles.switchWrapper}>
+                            <Text>Юнак</Text>
+                            <Switch
+                                style={styles.switcher}
+                                onValueChange={this.toggleSwitch.bind(this)}
+                                value={this.state.is_vyhovnyk}
+                                ios_backgroundColor="#7f0000"
+                                trackColor={{ true: '#004d40', false: '#7f0000' }}
+                            >
+                            </Switch>
+                            <Text>Виховник</Text>
+                        </View>
+                        {this.chosedInputs()}
+                    </View>
                     <View style={styles.tabs}>
-                        <Button onPress={() => this.chooseLogIn()} title="Log in" />
-                        <Button onPress={() => this.chooseSignUp()} title="Sign up" />
+                        <Button onPress={() => this.chooseLogIn()} title="Увійти" />
+                        <Button onPress={() => this.chooseSignUp()} title="Зареєструватись" />
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -90,7 +117,7 @@ class RegistrationPage extends Component {
                 <View style={styles.inputsWrapper}>
                     <TextInput value={this.state.email} onChangeText={email => this.setState({ email })} style={styles.textInput} placeholder="login" />
                     <TextInput value={this.state.password} onChangeText={password => this.setState({ password })} style={styles.textInput} placeholder="password" secureTextEntry={true} />
-                    <Button onPress={() => this.logIn()} title="Log in" />
+                    <Button onPress={() => this.logIn()} title="Увійти" />
                 </View>
             )
         } else {
@@ -100,11 +127,16 @@ class RegistrationPage extends Component {
                     <TextInput value={this.state.surname} onChangeText={surname => this.setState({ surname })} style={styles.textInput} placeholder="surname" />
                     <TextInput value={this.state.email} onChangeText={email => this.setState({ email })} style={styles.textInput} placeholder="login" />
                     <TextInput value={this.state.password} onChangeText={password => this.setState({ password })} style={styles.textInput} placeholder="password" secureTextEntry={true} />
-                    <Button onPress={() => this.signUp()} title="Sign Up" />
+                    <Button onPress={() => this.signUp()} title="Зареєструватись" />
                 </View>
             )
         }
+    }
 
+    toggleSwitch() {
+        this.setState({
+            is_vyhovnyk: !this.state.is_vyhovnyk
+        });
     }
 
     chooseLogIn() {
@@ -122,22 +154,31 @@ class RegistrationPage extends Component {
     logIn() {
         axios.post("http://localhost:3000/", {
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password,
+            // is_vyhovnyk: this.state.is_vyhovnyk
         }).
             then(response => {
                 this.props.setToken(response.headers["x-auth-token"]);
-                // console.log(response.headers["x-auth-token"]);
                 this.props.setUser(response.data);
-                this.props.navigation.navigate('MemberList');
+                if (this.state.is_vyhovnyk) {
+                    this.props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'MemberList' }],
+                    });
+                } else {
+                    this.props.navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'OneMember' }],
+                    });
+                }
             })
             .catch(err => {
-                console.log(123123);
                 console.log(err);
             })
     }
     signUp() {
         axios.post("http://localhost:3000/registration", {
-            is_vyhovnyk: false,
+            is_vyhovnyk: this.state.is_vyhovnyk,
             email: this.state.email,
             password: this.state.password,
             name: this.state.name,
@@ -145,6 +186,11 @@ class RegistrationPage extends Component {
         }).
             then(response => {
                 console.log(response.data);
+                Alert.alert("Дякуємо!", "Ви успішно зареєстрован, тепер перейдіть до входу.");
+            })
+            .catch(err => {
+                Alert.alert("Помилка!", "Щось пішло не так...");
+                console.log(err);
             })
     }
 }

@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import RegistrationPage from './pages/RegistrationPage';
 import MemberList from './pages/MemberList';
 import OneMember from './pages/OneMember';
@@ -11,6 +10,7 @@ import OneCheckList from './pages/OneCheckList';
 
 
 const Stack = createStackNavigator();
+
 
 const App = () => {
   return (

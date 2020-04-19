@@ -28,8 +28,9 @@ export default class OneMember extends Component {
     constructor(props) {
         super(props);
         this.props = props;
+        
         this.state = {
-            member: props.route.params.member
+            member: props.route.params ? props.route.params.member : "lol"
         };
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -15,8 +15,23 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         width: "100%"
     },
-    item: {
-
+    addNewWrapper: {
+        padding: 20,
+        paddingTop: 60
+    },
+    addInput: {
+        borderBottomColor: "#000",
+        borderBottomWidth: 1,
+        height: 30,
+        marginTop: 30,
+        paddingLeft: 8,
+        paddingBottom: 10,
+        fontSize: 16
+    },
+    buttonAddWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginTop: 20
     }
 })
 
@@ -45,7 +60,7 @@ export default class MemberList extends Component {
 
 
     render() {
-        let member_list = this.state.member_list.map( (member, index) => (
+        let member_list = this.state.member_list.map((member, index) => (
             <TouchableOpacity style={styles.itemWrapper} key={member.id} onPress={() => {
                 this.props.navigation.navigate('OneMember', {
                     member
@@ -58,7 +73,17 @@ export default class MemberList extends Component {
         return (
             <View style={styles.bodyWrapper} >
                 <ScrollView>
-                    {member_list}
+                    <View>
+                        {member_list}
+                    </View>
+                    <View style={styles.addNewWrapper}>
+                        <Text>Добавити нового юнака</Text>
+                        <TextInput style={styles.addInput} placeholder="Логін юнака" />
+                        <View style={styles.buttonAddWrapper} >
+                            <Button title="Додати"></Button>
+                        </View>
+                    </View>
+
                 </ScrollView>
             </View>
         );

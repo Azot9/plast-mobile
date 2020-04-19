@@ -46,20 +46,22 @@ class Point extends Component {
     }
     toggleSwitch(checked) {
 
-        axios.post("http://localhost:3000/lol", {
-            lol: "zazaza"
-        },
-            {
-                headers: {
-                    "x-access-token": this.props.token
-                }
-            }
-        ).
-            then(response => {
-                console.log(response.data);
-            }).catch(err => {
-                console.log(err);
-            })
+        console.log(this.props.user)
+
+        // axios.post("http://localhost:3000/lol", {
+        //     lol: "zazaza"
+        // },
+        //     {
+        //         headers: {
+        //             "x-access-token": this.props.token
+        //         }
+        //     }
+        // ).
+        //     then(response => {
+        //         console.log(response.data);
+        //     }).catch(err => {
+        //         console.log(err);
+        //     })
 
         this.setState({
             point_checked: !this.state.point_checked
@@ -69,7 +71,8 @@ class Point extends Component {
 
 function mapStateToProps(state) {
     return {
-        token: state.token
+        token: state.token,
+        user: state.user
     }
 }
 

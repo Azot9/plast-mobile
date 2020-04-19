@@ -1,13 +1,18 @@
 const initialState = {
-    token: 123
+    token: "",
+    user: null
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SAVE_TOKEN':
-            return {
+            return Object.assign({}, state, {
                 token: action.token
-            }
+            })
+        case 'SAVE_USER':
+            return Object.assign({}, state, {
+                user: action.user
+            })
         default:
             return state
     }

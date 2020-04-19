@@ -126,6 +126,8 @@ class RegistrationPage extends Component {
         }).
             then(response => {
                 this.props.setToken(response.headers["x-auth-token"]);
+                // console.log(response.headers["x-auth-token"]);
+                this.props.setUser(response.data);
                 this.props.navigation.navigate('MemberList');
             })
             .catch(err => {
@@ -156,7 +158,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setToken: (token) => dispatch({ type: "SAVE_TOKEN", token })
+        setToken: (token) => dispatch({ type: "SAVE_TOKEN", token }),
+        setUser: (user) => dispatch({ type: "SAVE_USER", user })
     }
 }
 

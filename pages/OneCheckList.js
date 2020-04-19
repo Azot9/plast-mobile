@@ -37,7 +37,7 @@ export default class OneCheckList extends Component {
         const list = this.state.list.map((item, index) => (
             <View key={index} >
                 {this.setTitle(item.section_id, item.section_name)}
-                {this.setList(item.section_list)}
+                {this.setList(item.section_list, item.section_id, )}
             </View>
         ))
         return (
@@ -63,7 +63,7 @@ export default class OneCheckList extends Component {
     setList(section_list) {
         return section_list.map((item) => (
             <View key={item.id} style={styles.pointWrapper}>
-                <Point point={item} />
+                <Point point={item}  />
             </View>
         ))
     }

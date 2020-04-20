@@ -4,7 +4,7 @@ const check_lists = [
         name: "Проба пластуна-прихильника",
         list: [
             {
-                section_id: "A",
+                section_id: null,
                 section_name: null,
                 section_list: [
                     {

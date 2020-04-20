@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import check_lists from "../public/check_list"
+import { connect } from "react-redux";
 
 const styles = StyleSheet.create({
     bodyWrapper: {
@@ -23,32 +24,55 @@ const styles = StyleSheet.create({
     }
 })
 
-export default class OneMember extends Component {
+class OneMember extends Component {
 
     constructor(props) {
         super(props);
         this.props = props;
-        
+
         this.state = {
-            member: props.route.params ? props.route.params.member : "lol"
+            member: props.route.params ? props.route.params.member : null
         };
     }
 
     render() {
-        const member_check_list = check_lists.map((item, index) => (
-            <TouchableOpacity key={item.id} style={styles.checkElWrapper} onPress={() => {
-                this.props.navigation.navigate('OneCheckList', {
-                    list: item.list
-                });
-            }}>
-                <Text style={styles.checkEl}>{index}.  {item.name}</Text>
-            </TouchableOpacity>
-        ))
+        let current_member;
+        if(this.props.user.is_vyhovnyk) {
+            current_member = this.state.member;
+        } else {
+            current_member = this.props.user;
+        }
+        const user_check_lists = [current_member.check_list_zero, current_member.check_list_first, current_member.check_list_second];
+        user_check_lists.map(item => {
+            console.log(item)
+        })
+        const member_check_list = user_check_lists.map((item, index) => {
+            const current_check_lists = check_lists.find(check_item => check_item.id == item.id);
+            return (
+                <TouchableOpacity key={item.id} style={styles.checkElWrapper} onPress={() => {
+                    this.props.navigation.navigate('OneCheckList', {
+                        list: item.list,
+                        current_list: current_check_lists.list
+                    });
+                }}>
+                    <Text style={styles.checkEl}>{index}.  {current_check_lists.name}</Text>
+                </TouchableOpacity>
+            )
+        })
         return (
             <View style={styles.bodyWrapper} >
-                <Text style={styles.nameTitle}>{this.state.member.name}</Text>
+                <Text style={styles.nameTitle}>{current_member.name}</Text>
                 {member_check_list}
             </View>
         );
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(OneMember);

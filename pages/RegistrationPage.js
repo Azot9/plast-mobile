@@ -155,7 +155,7 @@ class RegistrationPage extends Component {
         axios.post("http://localhost:3000/", {
             email: this.state.email,
             password: this.state.password,
-            // is_vyhovnyk: this.state.is_vyhovnyk
+            is_vyhovnyk: this.state.is_vyhovnyk
         }).
             then(response => {
                 this.props.setToken(response.headers["x-auth-token"]);

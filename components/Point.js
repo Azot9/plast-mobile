@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Switch } from 'react-native';
 import { connect } from "react-redux";
 import axios from 'axios';
 
-
 const styles = StyleSheet.create({
     pointWrapper: {
         flexDirection: 'row',
@@ -25,7 +24,7 @@ class Point extends Component {
         super(props);
         this.props = props;
         this.state = {
-            point_checked: this.props.checked
+            point_checked: this.props.point.checked
         };
     }
 
@@ -33,13 +32,14 @@ class Point extends Component {
         return (
             <View style={styles.pointWrapper}>
                 <Switch
+                    disabled={!this.props.user.is_vyhovnyk}
                     onValueChange={this.toggleSwitch.bind(this)}
                     value={this.state.point_checked}>
                 </Switch>
 
                 <Text style={styles.descriptionWrapper}>
                     <Text style={styles.number}> {this.props.point.id}.
-                    </Text> {this.props.point.description}
+                    </Text> {this.props.current_point.description}
                 </Text>
             </View>
         );

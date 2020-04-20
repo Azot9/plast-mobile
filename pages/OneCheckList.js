@@ -29,15 +29,17 @@ export default class OneCheckList extends Component {
         this.props = props;
         this.state = {
             switch_value: false,
-            list: this.props.route.params.list
+            list: this.props.route.params.list ,
+            current_list: this.props.route.params.current_list 
         };
     }
 
     render() {
+        const current_list = this.state.current_list;
         const list = this.state.list.map((item, index) => (
             <View key={index} >
-                {this.setTitle(item.section_id, item.section_name)}
-                {this.setList(item.section_list, item.section_id, )}
+                {this.setTitle(current_list[index].section_id, current_list[index].section_name)}
+                {this.setList(item.section_list, current_list[index].section_list)}
             </View>
         ))
         return (
@@ -60,10 +62,10 @@ export default class OneCheckList extends Component {
             return null;
         }
     }
-    setList(section_list) {
-        return section_list.map((item) => (
+    setList(section_list, current_list) {
+        return section_list.map((item, index) => (
             <View key={item.id} style={styles.pointWrapper}>
-                <Point point={item}  />
+                <Point point={item} current_point={current_list[index]}  />
             </View>
         ))
     }

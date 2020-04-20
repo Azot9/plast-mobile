@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
+import { connect } from "react-redux";
+import axios from 'axios';
+
 
 
 const styles = StyleSheet.create({
@@ -35,11 +38,12 @@ const styles = StyleSheet.create({
     }
 })
 
-export default class MemberList extends Component {
+class MemberList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            child_login: "",
             member_list: [
                 {
                     id: 0,
@@ -60,7 +64,14 @@ export default class MemberList extends Component {
 
 
     render() {
-        let member_list = this.state.member_list.map((member, index) => (
+        // console.log(this.props.user.gurtok);
+
+        for (const iterator of this.props.user.gurtok) {
+            console.log(iterator);
+        }
+
+
+        let member_list = this.props.user.gurtok.map((member, index) => (
             <TouchableOpacity style={styles.itemWrapper} key={member.id} onPress={() => {
                 this.props.navigation.navigate('OneMember', {
                     member
@@ -78,9 +89,9 @@ export default class MemberList extends Component {
                     </View>
                     <View style={styles.addNewWrapper}>
                         <Text>Добавити нового юнака</Text>
-                        <TextInput style={styles.addInput} placeholder="Логін юнака" />
+                        <TextInput value={this.state.child_login} onChangeText={child_login => this.setState({ child_login })} style={styles.addInput} placeholder="Логін юнака" />
                         <View style={styles.buttonAddWrapper} >
-                            <Button title="Додати"></Button>
+                            <Button onPress={() => this.addChild()} title="Додати" ></Button>
                         </View>
                     </View>
 
@@ -88,4 +99,37 @@ export default class MemberList extends Component {
             </View>
         );
     }
+
+    addChild() {
+
+        axios.post("http://localhost:3000/add_child",
+            {
+                email: this.state.child_login,
+                id: this.props.user.id
+            },
+            {
+                headers: {
+                    "x-access-token": this.props.token
+                }
+            }).
+            then(response => {
+                console.log(response.data);
+            })
+            .catch(err => {
+                // Alert.alert("Помилка!", "Щось пішло не так...");
+                console.log(err);
+            })
+    }
+
+
 }
+
+
+function mapStateToProps(state) {
+    return {
+        token: state.token,
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(MemberList);

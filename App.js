@@ -16,10 +16,23 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator >
-        <Stack.Screen name="RegistrationPage" component={RegistrationPage} options={{ headerTitle: null, headerStyle: { height: 0 } }} />
-        <Stack.Screen name="MemberList" component={MemberList} />
-        <Stack.Screen name="OneMember" component={OneMember} />
-        <Stack.Screen name="OneCheckList" component={OneCheckList} />
+        <Stack.Screen
+          name="RegistrationPage"
+          component={RegistrationPage}
+          options={{ headerTitle: null, headerStyle: { height: 0 } }}
+        />
+        <Stack.Screen 
+        name="MemberList" 
+        component={MemberList} 
+        options={{ headerTitle: "Мій гурток" }} />
+        <Stack.Screen name="OneMember" 
+          component={OneMember} 
+          options={({ route }) => ({ title: route.params ? route.params.member.name : "Мої проби" })}
+         />
+        <Stack.Screen 
+          name="OneCheckList" component={OneCheckList}
+          options={({ route }) => ({ title: route.params.current_list.name || "fsdf" })}
+        />
       </Stack.Navigator>
     </NavigationContainer>);
 };

@@ -52,7 +52,7 @@ class OneMember extends Component {
                 <TouchableOpacity key={item.id} style={styles.checkElWrapper} onPress={() => {
                     this.props.navigation.navigate('OneCheckList', {
                         list: item.list,
-                        current_list: current_check_lists.list
+                        current_list: current_check_lists
                     });
                 }}>
                     <Text style={styles.checkEl}>{index}.  {current_check_lists.name}</Text>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { connect } from "react-redux";
 import axios from 'axios';
 
@@ -44,34 +44,18 @@ class MemberList extends Component {
         super(props);
         this.state = {
             child_login: "",
-            member_list: [
-                {
-                    id: 0,
-                    name: "Ігор",
-                    progress: {},
-                    visiting: {}
-                },
-                {
-                    id: 1,
-                    name: "Олег",
-                    progress: {},
-                    visiting: {}
-                },
-            ]
         }
     }
 
 
 
     render() {
-        // console.log(this.props.user.gurtok);
-
-        for (const iterator of this.props.user.gurtok) {
+        for (const iterator of this.props.gurtok) {
             console.log(iterator);
         }
 
 
-        let member_list = this.props.user.gurtok.map((member, index) => (
+        let member_list = this.props.gurtok.map((member, index) => (
             <TouchableOpacity style={styles.itemWrapper} key={member.id} onPress={() => {
                 this.props.navigation.navigate('OneMember', {
                     member
@@ -113,10 +97,13 @@ class MemberList extends Component {
                 }
             }).
             then(response => {
+                Alert.alert("Юнака успішно додано");
                 console.log(response.data);
+                this.props.setGurtok(response.data.gurtok);
+                console.log(this.props.gurtok);
             })
             .catch(err => {
-                // Alert.alert("Помилка!", "Щось пішло не так...");
+                Alert.alert("Не можливо добавити цього юнака");
                 console.log(err);
             })
     }
@@ -128,8 +115,14 @@ class MemberList extends Component {
 function mapStateToProps(state) {
     return {
         token: state.token,
-        user: state.user
+        user: state.user,
+        gurtok: state.gurtok,
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok })
     }
 }
 
-export default connect(mapStateToProps)(MemberList);
+export default connect(mapStateToProps, mapDispatchToProps)(MemberList);

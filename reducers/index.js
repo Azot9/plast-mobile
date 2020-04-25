@@ -13,6 +13,10 @@ const reducer = (state = initialState, action) => {
             return Object.assign({}, state, {
                 user: action.user
             })
+        case 'SAVE_GURTOK':
+            return Object.assign({}, state, {
+                gurtok: action.gurtok
+            })
         default:
             return state
     }

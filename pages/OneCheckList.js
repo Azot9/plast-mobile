@@ -27,10 +27,12 @@ export default class OneCheckList extends Component {
     constructor(props) {
         super(props);
         this.props = props;
+        console.log(this.props.route.params.list);
+        console.log(this.props.route.params.current_list);
         this.state = {
             switch_value: false,
             list: this.props.route.params.list ,
-            current_list: this.props.route.params.current_list 
+            current_list: this.props.route.params.current_list.list
         };
     }
 

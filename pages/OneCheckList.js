@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, Switch } from 'react-native';
 import Point from "../components/Point";
+import { connect } from "react-redux";
+
 
 const styles = StyleSheet.create({
     bodyWrapper: {
@@ -22,26 +24,26 @@ const styles = StyleSheet.create({
     }
 })
 
-export default class OneCheckList extends Component {
+class OneCheckList extends Component {
 
     constructor(props) {
         super(props);
         this.props = props;
-        console.log(this.props.route.params.list);
-        console.log(this.props.route.params.current_list);
         this.state = {
             switch_value: false,
             list: this.props.route.params.list ,
-            current_list: this.props.route.params.current_list.list
+            current_list: this.props.route.params.current_list.list,
+            gurtok: this.props.gurtok
         };
     }
 
     render() {
+
         const current_list = this.state.current_list;
         const list = this.state.list.map((item, index) => (
             <View key={index} >
                 {this.setTitle(current_list[index].section_id, current_list[index].section_name)}
-                {this.setList(item.section_list, current_list[index].section_list)}
+                {this.setList(item, current_list[index].section_list)}
             </View>
         ))
         return (
@@ -64,11 +66,24 @@ export default class OneCheckList extends Component {
             return null;
         }
     }
-    setList(section_list, current_list) {
-        return section_list.map((item, index) => (
+    setList(section, current_list) {
+        return section.section_list.map((item, index) => (
             <View key={item.id} style={styles.pointWrapper}>
-                <Point point={item} current_point={current_list[index]}  />
+                <Point
+                  point={item}
+                  current_point={current_list[index]}
+                  section_id={section.section_id}
+                  />
             </View>
         ))
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        gurtok: state.gurtok,
+    }
+}
+
+export default connect(mapStateToProps)(OneCheckList);

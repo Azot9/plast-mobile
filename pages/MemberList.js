@@ -47,19 +47,14 @@ class MemberList extends Component {
         }
     }
 
-
-
     render() {
-        for (const iterator of this.props.gurtok) {
-            console.log(iterator);
-        }
-
+        console.log("MemberList");
+        console.log(this.props.gurtok[0].check_lists[0].list[0]);
 
         let member_list = this.props.gurtok.map((member, index) => (
             <TouchableOpacity style={styles.itemWrapper} key={member.id} onPress={() => {
-                this.props.navigation.navigate('OneMember', {
-                    member
-                });
+                this.props.setCurrentChild(member.id);
+                this.props.navigation.navigate('OneMember');
             }}>
                 <Text style={styles.item} >{index + 1}. {member.name}</Text>
             </TouchableOpacity>
@@ -100,7 +95,6 @@ class MemberList extends Component {
                 Alert.alert("Юнака успішно додано");
                 console.log(response.data);
                 this.props.setGurtok(response.data.gurtok);
-                console.log(this.props.gurtok);
             })
             .catch(err => {
                 Alert.alert("Не можливо добавити цього юнака");
@@ -121,7 +115,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok })
+        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok }),
+        setCurrentChild: (child_id) => dispatch({ type: "SET_CHILD", child_id }),
     }
 }
 

@@ -38,11 +38,12 @@ class OneMember extends Component {
     render() {
         let current_member;
         if(this.props.user.is_vyhovnyk) {
-            current_member = this.state.member;
+            current_member = this.props.gurtok.find( member => member.id === this.props.child_id)
         } else {
             current_member = this.props.user;
         }
-        const user_check_lists = [current_member.check_list_zero, current_member.check_list_first, current_member.check_list_second];
+        console.log(current_member);
+        const user_check_lists = current_member.check_lists;
         user_check_lists.map(item => {
             console.log(item)
         })
@@ -50,6 +51,7 @@ class OneMember extends Component {
             const current_check_lists = check_lists.find(check_item => check_item.id == item.id);
             return (
                 <TouchableOpacity key={item.id} style={styles.checkElWrapper} onPress={() => {
+                    this.props.setCurrentChecklist(item.id);
                     this.props.navigation.navigate('OneCheckList', {
                         list: item.list,
                         current_list: current_check_lists
@@ -71,8 +73,16 @@ class OneMember extends Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.user
+        user: state.user,
+        gurtok: state.gurtok,
+        child_id: state.child_id,
     }
 }
 
-export default connect(mapStateToProps)(OneMember);
+function mapDispatchToProps(dispatch) {
+    return {
+        setCurrentChecklist: (checklist_id) => dispatch({ type: "SET_CHECKLIST", checklist_id }),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OneMember);

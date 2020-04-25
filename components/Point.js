@@ -29,11 +29,12 @@ class Point extends Component {
     }
 
     render() {
+        
         return (
             <View style={styles.pointWrapper}>
                 <Switch
                     disabled={!this.props.user.is_vyhovnyk}
-                    onValueChange={this.toggleSwitch.bind(this)}
+                    onValueChange={this.toggleSwitch.bind(this, this.props.point.id)}
                     value={this.state.point_checked}>
                 </Switch>
 
@@ -44,36 +45,51 @@ class Point extends Component {
             </View>
         );
     }
-    toggleSwitch(checked) {
+    toggleSwitch(point_id) {
 
-        console.log(this.props.user)
-
-        // axios.post("http://localhost:3000/lol", {
-        //     lol: "zazaza"
-        // },
-        //     {
-        //         headers: {
-        //             "x-access-token": this.props.token
-        //         }
-        //     }
-        // ).
-        //     then(response => {
-        //         console.log(response.data);
-        //     }).catch(err => {
-        //         console.log(err);
-        //     })
+        axios.post("http://localhost:3000/toggle_point", {
+            id: this.props.user.id,
+            child_id: this.props.child_id,
+            checklist_id: this.props.checklist_id,
+            section_id: this.props.section_id,
+            point_id,
+            point_checked: !this.state.point_checked
+        },
+            {
+                headers: {
+                    "x-access-token": this.props.token
+                }
+            }
+        ).
+            then(response => {
+                this.props.setGurtok(response.data.gurtok);
+            }).catch(err => {
+                console.log(err);
+            })
 
         this.setState({
             point_checked: !this.state.point_checked
         })
+
+
     }
 }
 
 function mapStateToProps(state) {
     return {
         token: state.token,
-        user: state.user
+        user: state.user,
+        child_id: state.child_id,
+        checklist_id: state.checklist_id,
+        gurtok: state.gurtok,
     }
 }
 
-export default connect(mapStateToProps)(Point);
+function mapDispatchToProps(dispatch) {
+    return {
+        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok }),
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Point);

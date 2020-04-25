@@ -1,6 +1,9 @@
 const initialState = {
     token: "",
-    user: null
+    user: null,
+    gurtok: [],
+    child_id: null,
+    checklist_id: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -16,6 +19,14 @@ const reducer = (state = initialState, action) => {
         case 'SAVE_GURTOK':
             return Object.assign({}, state, {
                 gurtok: action.gurtok
+            })
+        case 'SET_CHILD':
+            return Object.assign({}, state, {
+                child_id: action.child_id
+            })
+        case 'SET_CHECKLIST':
+            return Object.assign({}, state, {
+                checklist_id: action.checklist_id
             })
         default:
             return state

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, Button, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { connect } from "react-redux";
 import axios from 'axios';
-
-
+import {setGurtok, setCurrentChild} from "../actions";
 
 const styles = StyleSheet.create({
     bodyWrapper: {
@@ -101,8 +100,6 @@ class MemberList extends Component {
                 console.log(err);
             })
     }
-
-
 }
 
 
@@ -115,8 +112,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
     return {
-        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok }),
-        setCurrentChild: (child_id) => dispatch({ type: "SET_CHILD", child_id }),
+        setGurtok: (gurtok) => dispatch(setGurtok(gurtok)),
+        setCurrentChild: (child_id) => dispatch(setCurrentChild(child_id)),
     }
 }
 

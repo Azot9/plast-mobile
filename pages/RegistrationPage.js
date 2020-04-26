@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TextInput, Button, Alert, Keyboard, TouchableWithoutFeedback, Switch } from 'react-native';
 import axios from 'axios';
-import setToken from "../actions"
 import { connect } from "react-redux";
+import {setUser, setToken, setGurtok} from "../actions";
+
 
 
 const styles = StyleSheet.create({
@@ -207,9 +208,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setToken: (token) => dispatch({ type: "SAVE_TOKEN", token }),
-        setUser: (user) => dispatch({ type: "SAVE_USER", user }),
-        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok })
+        setToken: (token) => dispatch(setToken(token)),
+        setUser: (user) => dispatch(setUser(user)),
+        setGurtok: (gurtok) => dispatch(setGurtok(gurtok))
     }
 }
 

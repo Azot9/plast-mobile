@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import check_lists from "../public/check_list"
 import { connect } from "react-redux";
+import {setCurrentChecklist} from "../actions";
+
 
 const styles = StyleSheet.create({
     bodyWrapper: {
@@ -81,7 +83,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setCurrentChecklist: (checklist_id) => dispatch({ type: "SET_CHECKLIST", checklist_id }),
+        setCurrentChecklist: (checklist_id) => dispatch(setCurrentChecklist(checklist_id)),
     }
 }
 

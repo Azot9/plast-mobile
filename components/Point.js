@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Switch } from 'react-native';
-// import check_lists from "../public/check_list"
 import { connect } from "react-redux";
 import axios from 'axios';
+import {setGurtok} from "../actions";
+
 
 const styles = StyleSheet.create({
     pointWrapper: {
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     },
     descriptionWrapper: {
         paddingHorizontal: 20,
-        width: "auto"
+        width: "92%"
     },
     number: {
         fontWeight: "800"
@@ -87,7 +88,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        setGurtok: (gurtok) => dispatch({ type: "SAVE_GURTOK", gurtok }),
+        setGurtok: (gurtok) => dispatch(setGurtok(gurtok)),
     }
 }
 
